@@ -51,3 +51,8 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 ![x](ch4slides/ch4_11.png)
 
 - Unstructured text data cannot be directly used in most analyses. Multiple steps need to be taken to go from a long free form string to a set of numeric columns in the right format that can be ingested by a machine learning model. The first step of this process is to standardize the data and eliminate any characters that could cause problems later on in your analytic pipeline. <br><br> In this chapter you will be working with a new dataset containing the inaugural speeches of the presidents of the United States loaded as speech_df, with the speeches stored in the text column.
+
+		# Print the first 5 rows of the text column
+		print(speech_df.text.head())
+
+

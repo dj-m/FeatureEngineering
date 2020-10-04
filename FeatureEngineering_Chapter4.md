@@ -296,3 +296,78 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 
   - The vectorizer should only be fit on the train set, never on your test set.
   
+![slide 34](ch4slides/ch4_34.png)
+
+- Looking at individual words on their own without any context or word order is called a bag-of words model.
+  - The words are treated as if they're being drawn from a bag with no concept or order or grammar.
+  - Individual words can lose all their context/meaning when viewed independently.
+  
+![slide 35](ch4slides/ch4_35.png)
+
+- One common method to retain at least some concept of word order in a text is to instead use multiple consecutive words like pairs (**bi-gram**) or three consecutive words (**tri-grams**).
+  - This maintains at least some ordering information while at the same time allowing for the creation of a reasonable set of features.
+  
+![slide 36](ch4slides/ch4_36.png)
+
+- To leverage **n-grams** in your own models, add an additional argument **ngram\_range** to your instantiation of TF-IDF vectorizer.
+  - The values assigned to the argument are the minimum and maximum length of n-grams to be included.
+  - In this example you'd only be looking at bi-grams (n-grams with two words).
+    - Printing the bi-gram features created we can see the pairs of words instead of single words.
+
+![slide 37](ch4slides/ch4_37.png)
+
+- When creating new features, you should always take time to check your work, and ensure that the features you are creating make sense.
+  - A good way to check your n-grams is to see what are the most common values being recorded.
+    - This can be done by summing the values of your DataFrame of count values that wer created suing the **sum()** method.
+	
+![slide 38](ch4slides/ch4_38.png)
+
+- After sorting the values in descending order you can see the most commonly occurring values.
+  - It's not surprising that that most commonly occuring bi-gram in a dataset of US president's speeches is United States which indicates that the features being created make sense.
+  
+![slide 39](ch4slides/ch4_39.png)
+
+- So far you have created features based on individual words in each of the texts. This can be quite powerful when used in a machine learning model but you may be concerned that by looking at words individually a lot of the context is being ignored. To deal with this when creating models you can use n-grams which are sequence of n words grouped together. For example:
+  - bigrams: Sequences of two consecutive words
+  - trigrams: Sequences of two consecutive words
+  
+- These can be automatically created in your dataset by specifying the ngram_range argument as a tuple (n1, n2) where all n-grams in the n1 to n2 range are included.
+
+		# Import CountVectorizer
+		from sklearn.feature_extraction.text import CountVectorizer
+		
+		# Instantiate a trigram vectorizer
+		cv_trigram_vec = CountVectorizer(max_features=100, 
+		                                 stop_words='english', 
+		                                 ngram_range = (3,3))
+										 
+		# Fit and apply trigram vectorizer
+		cv_trigram = cv_trigram_vec.fit_transform(speech_df['text_clean'])
+		
+		# Print the trigram features
+		print(cv_trigram_vec.get_feature_names())
+
+  - Here you can see that by taking sequential word pairings, some context is preserved.
+
+- Its always advisable once you have created your features to inspect them to ensure that they are as you would expect. This will allow you to catch errors early, and perhaps influence what further feature engineering you will need to do.<br><br> The vectorizer (cv) you fit in the last exercise and the sparse array consisting of word counts (cv_trigram) is available in your workspace.
+
+		# Create a DataFrame of the features
+		cv_tri_df = pd.DataFrame(cv_trigram.toarray(), 
+		                 columns=cv_trigram_vec.get_feature_names()).add_prefix('Counts_')
+						 
+		# Print the top 5 words in the sorted output
+		print(cv_tri_df.sum().sort_values(ascending=False).head())
+
+  - That the most common trigram is _constitution united states_ makes a lot of sense for US presidents speeches.
+
+![slide 40](ch4slides/ch4_40.png)
+
+| ![slide 41](ch4slides/ch4_41.png) |
+| :-: |
+| Here, you learned how to better understand the underlying types of data contained in your dataset, how to create features out of categorical columns and how to bin continuous columns. |
+| ![slide 42](ch4slides/ch4_42.png) |
+| Here, we explored how to deal with some of the challenges of real-world data, such as missing values and non-desirable characters in your data. |
+| ![slide 43](ch4slides/ch4_43.png) |
+| Here, it was discussed how different distributions can affect your models and how to mitigate it, and different ways to deal with spurious outlier values in your dataset. |
+| ![slide 44](ch4slides/ch4_44.png) |
+| Here, we explored how to deal with non tabular data such as free text and different ways to encode it for use with a machine learning model. |

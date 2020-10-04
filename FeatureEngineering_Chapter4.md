@@ -197,3 +197,102 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 		print(speech_df_new.head())
 
 - With the new features combined with the orginial DataFrame they can be now used for ML models or analysis.
+
+![slide 24](ch4slides/ch4_24.png)
+
+- Counts of occurences of words can be a good first step towards encoding your text to build models, it has some limitations.
+  - The main issue is counts will be much higher for very common words even when they occur across all texts, providing little value as a distinguishing feature.
+  
+| ![slide 25](ch4slides/ch4_25.png) |
+| :-: |
+| The word 'the' shows up, quite often, in several columns. |
+
+- To limit these words from overpowering your model normalization can be used.
+  - One of the most effective approaches is called **Term Frequency Inverse Document Frequency** or _TF-IDF_.
+
+| ![slide 26](ch4slides/ch4_26.png) |
+| :-: |
+| TF-IDF divides the number of times a word occurs in a document by a measure of what proportion of the document a word occurs in all documents. |
+
+- This has the effect of reducing the value of common words, while increasing the weight of words that do not occur in many documents.
+
+| ![slide 27](ch4slides/ch4_27.png) |
+| :-: |
+| You import it similarly to the Count Vectorizer from before. |
+| ![slide 28](ch4slides/ch4_28.png) |
+| Using **max\_features** argument allows you to use only the most common words. <br><br> While **stop\_words** allows you to omit common words like 'and' or 'the'. |
+
+- For stop words, you can use scikit-learn's built in list, load your own, or use lists provided by other python libraries.
+
+![slide 29](ch4slides/ch4_29.png)
+
+- Once the vectorizer's been specified, you can fit it, and apply it to the text that you want to transform. 
+  - Here, we're fitting and transforming the train data, a subset of the original data.
+  
+![slide 30](ch4slides/ch4_30.png)
+
+- You combine the TF-IDF values along with the feature names in  DataFrame as shown above.
+
+![slide 31](ch4slides/ch4_31.png)
+
+- Here, you check how the different words are being valued, and see which words are receiving the highest scores through the process.
+  - This will help you understand if the features being generated makes sense or not.
+- One ad hoc method is to isolate a single row of transformed DataFrame (tv\_df in this case) using the iloc accessor, and then sorting the values in the row in descending order as shown here.
+  - These top ranked values make sense for a text of a presidential speech.
+  
+![slide 32](ch4slides/ch4_32.png)
+
+- How do you apply your model to test data?
+  - You should preprocess your test data using the transformations made on the train data only to ensure that the same features are created you should use the same vectorizer that you fit on the training data.
+  - First transform the test data using the tv vectorizer and then recreate the test data by combining the TF-IDF values, feature names, and other columns.
+
+![slide 33](ch4slides/ch4_33.png)
+
+- While counts of occurrences of words can be useful to build models, words that occur many times may skew the results undesirably. To limit these common words from overpowering your model a form of normalization can be used. In this lesson you will be using Term frequency-inverse document frequency (Tf-idf) as was discussed in the video. Tf-idf has the effect of reducing the value of common words, while increasing the weight of words that do not occur in many documents.
+
+		# Import TfidfVectorizer
+		from sklearn.feature_extraction.text import TfidfVectorizer
+		
+		# Instantiate TfidfVectorizer
+		tv = TfidfVectorizer(max_features = 100, stop_words = 'english')
+		
+		# Fit the vectroizer and transform the data
+		tv_transformed = tv.fit_transform(speech_df['text_clean'])
+		
+		# Create a DataFrame with these features
+		tv_df = pd.DataFrame(tv_transformed.toarray(), 
+		                     columns=tv.get_feature_names()).add_prefix('TFIDF_')
+		print(tv_df.head())
+
+  - Did you notice that counting the word occurences and calculating the Tf-idf weights are very similar? This is one of the reasons scikit-learn is very popular, a consistent API.
+  
+- After creating Tf-idf features you will often want to understand what are the most highest scored words for each corpus. This can be achieved by isolating the row you want to examine and then sorting the the scores from high to low.
+
+		# Isolate the row to be examined
+		sample_row = tv_df.iloc[0,:]
+		
+		# Print the top 5 words of the sorted output
+		print(sample_row.sort_values(ascending=False).head())
+
+  - Do you think these scores make sense for the corresponding words?
+  
+- When creating vectors from text, any transformations that you perform before training a machine learning model, you also need to apply on the new unseen (test) data. To achieve this follow the same approach from the last chapter: fit the vectorizer only on the training data, and apply it to the test data.<br><br> For this exercise the speech_df DataFrame has been split in two:
+  - train_speech_df: The training set consisting of the first 45 speeches.
+  - test_speech_df: The test set consisting of the remaining speeches.
+  
+	# Instantiate TfidfVectorizer
+	tv = TfidfVectorizer(max_features=100, stop_words='english')
+	
+	# Fit the vectroizer and transform the data
+	tv_transformed = tv.fit_transform(train_speech_df.text_clean)
+	
+	# Transform test data
+	test_tv_transformed = tv.transform(test_speech_df.text_clean)
+	
+	# Create new features for the test set
+	test_tv_df = pd.DataFrame(test_tv_transformed.toarray(), 
+	                          columns=tv.get_feature_names()).add_prefix('TFIDF_')
+	print(test_tv_df.head())
+
+  - The vectorizer should only be fit on the train set, never on your test set.
+  

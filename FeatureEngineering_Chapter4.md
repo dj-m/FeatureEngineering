@@ -279,20 +279,20 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 - When creating vectors from text, any transformations that you perform before training a machine learning model, you also need to apply on the new unseen (test) data. To achieve this follow the same approach from the last chapter: fit the vectorizer only on the training data, and apply it to the test data.<br><br> For this exercise the speech_df DataFrame has been split in two:
   - train_speech_df: The training set consisting of the first 45 speeches.
   - test_speech_df: The test set consisting of the remaining speeches.
-  
-	# Instantiate TfidfVectorizer
-	tv = TfidfVectorizer(max_features=100, stop_words='english')
-	
-	# Fit the vectroizer and transform the data
-	tv_transformed = tv.fit_transform(train_speech_df.text_clean)
-	
-	# Transform test data
-	test_tv_transformed = tv.transform(test_speech_df.text_clean)
-	
-	# Create new features for the test set
-	test_tv_df = pd.DataFrame(test_tv_transformed.toarray(), 
+
+    	# Instantiate TfidfVectorizer
+    	tv = TfidfVectorizer(max_features=100, stop_words='english')
+		
+    	# Fit the vectroizer and transform the data
+	    tv_transformed = tv.fit_transform(train_speech_df.text_clean)
+		
+	    # Transform test data
+	    test_tv_transformed = tv.transform(test_speech_df.text_clean)
+		
+    	# Create new features for the test set
+	    test_tv_df = pd.DataFrame(test_tv_transformed.toarray(), 
 	                          columns=tv.get_feature_names()).add_prefix('TFIDF_')
-	print(test_tv_df.head())
+	    print(test_tv_df.head())
 
   - The vectorizer should only be fit on the train set, never on your test set.
   

@@ -1,11 +1,11 @@
 # Feature Engineering: Chapter 2 - Dealing with Messy Data #
 Notes from the fourth chapter of the DataCamp Feature Engineering course accessible [here](https://learn.datacamp.com/courses/feature-engineering-for-machine-learning-in-python).
 
-![slide 1](ch4slides/ch2_01.png)
+![slide 1](ch2slides/ch2_01.png)
 
 - This lesson will explore the concept of messy and missing values, how to find them, and once identified how to deal with them.
 
-| ![slide 2](ch4slides/ch2_02.png) |
+| ![slide 2](ch2slides/ch2_02.png) |
 | :-: |
 | Real-world data often has noise or omissions that can stem from many sources, like those above. |
 
@@ -18,7 +18,7 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 - Transformation issue:
   - Average of a field with missing data.
   
-![slide 3](ch4slides/ch2_03.png)
+![slide 3](ch2slides/ch2_03.png)
 
 - Many machine learning models can't work with missing values.
   - A linear regression models needs a value for every row and column used in the data set.
@@ -27,27 +27,27 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 - Missing data can also provide information in and of itself:
   - a missing value for children means no children.
   
-| ![slide 4](ch4slides/ch2_04.png) |
+| ![slide 4](ch2slides/ch2_04.png) |
 | :-: |
 | Use **info()** method for a preliminary look at data completeness. |
 
 - Here you can see that StackOverflorJobsRecommend, Gender and RawSalary are highly underpopulated. Thi prompts investigating where these missing values occur.
 - Thislist is useful but becomes limited with larger datasets that have values missing scattered all over their features.
 
-![slide 5](ch4slides/ch2_05.png)
+![slide 5](ch2slides/ch2_05.png)
 
 - To find where these missing values exist, use the **isnull()** method.
   - All cells where missing values exist are shown as True.
   
-| ![slide 6](ch4slides/ch2_06.png) |
+| ![slide 6](ch2slides/ch2_06.png) |
 | :-: |
 | Count the number of missing values in a column by chaining **isnull()** with **sum()** methods. |
-| ![slide 7](ch4slides/ch2_07.png) |
+| ![slide 7](ch2slides/ch2_07.png) |
 | Using **notnull()** will show you non-missing values (False). |
 
 - Usage of **isnull()** & **notnull()** is allowed on the DataDrame as a whole and on each individual column.
 
-![slide 8](ch4slides/ch2_08.png)
+![slide 8](ch2slides/ch2_08.png)
 
 - How sparse is my data?
   - Most data sets contain missing values, often represented as NaN (Not a Number). If you are working with Pandas you can easily check how many missing values exist in each column. <br><br> Let's find out how many of the developers taking the survey chose to enter their age (found in the Age column of so\_survey_df) and their gender (Gender column of so\_survey_df).

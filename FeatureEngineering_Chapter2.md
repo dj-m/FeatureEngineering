@@ -160,3 +160,38 @@ Notes from the second chapter of the DataCamp Feature Engineering course accessi
 
 ![slide 17](ch2slides/ch2_17.png)
 
+- Listwise Deletion will often not be feasible in real world use cases.
+
+![slide 18](ch2slides/ch2_18.png)
+
+- A common issue with removing all the rows with missing values is in building a predictive model.
+  - When training your model, removing rows would quickly result in errors if your test data set had missing values, where you do not have the option of just not predicting these rows.
+
+![slide 19](ch2slides/ch2_19.png)
+
+- The alternative:
+  - Replacing missing values.
+
+![slide 20](ch2slides/ch2_20.png)
+
+- What's a suitable value?
+  - Using a commonly occuring value along the lines of a mean or median.
+    - Using these methods can lead to biased estimates of the variances and covariances of the features.
+	- The standard error and test statistics can be incorrectly estimated.
+	- If these emtrics are needed, they should be calculated before the missing values have been filled.
+
+| ![slide 21](ch2slides/ch2_21.png) |
+| :-: |
+| Calculate directly from a pandas Series by calling the mean/median method on the series. The missing values are excluded by default when calculating these statistics. |
+| ![slide 22](ch2slides/ch2_22.png) |
+| Fill the missing values, using **fillna()** with the **mean()** of that column. |
+
+- Using **mean()** may result in too many decimal places.
+  - Using the **astype()** method will remove all the decimal places.
+  
+| ![slide 23](ch2slides/ch2_23.png) |
+| :-: |
+| You're also able to round the mean before filling the missing values with it. |
+
+![slide 24](ch2slides/ch2_24.png)
+

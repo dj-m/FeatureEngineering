@@ -221,3 +221,94 @@ Notes from the second chapter of the DataCamp Feature Engineering course accessi
 | :-: |
 | Never calculate values based on your test set. Values calculated on the train test should be applied to both DataFrames. |
 
+![slide 25](ch2slides/ch2_25.png)
+
+- You'll come across features that will need to be updated in some other ways than filling in their null/missing values.
+  - Looking at monetary values:
+    - If the dataset came from excel, it may contain currency signs or commas that prevent pandas form reading it as numeric values.
+
+| ![slide 26](ch2slides/ch2_26.png) |
+| :-: |
+| Intuitively you know that RawSalary should be numeric, but why is that? |
+| ![slide 27](ch2slides/ch2_27.png) |
+| Numeric columns shouldn't contain non-numeric characters. |
+| ![slide 28](ch2slides/ch2_28.png) |
+| To remove these commas, use string (str) methods like **replace()** to remove all occurrences of comma. The first argument is what you want to replace with the second argument being what you want to replace it with. |
+
+- To alter the data type of the column, use **astype()** method.
+- If an error results form converting a column's data type, it indicates stray characters which you didn't account for.
+  - Instead of manually searching for stray caharacters use **to\_numeric()** function along with the _errors_ argument.
+    - errors = coerce means that values not able to be converted to numeric will be replaced with NaN.
+
+| ![slide 29](ch2slides/ch2_29.png) |
+| :-: |
+| Use the **isna()** method to find which values failed to parse. It looks like dollar signs are in the data. Use the **replace()** method, as before, to remove the dollar signs.|
+
+![slide 30](ch2slides/ch2_30.png)
+
+- If you're applying different methods or the same one several times, you can chain the methods, calling one after the other to obtain the desirec result.
+  - For example:
+    - Cleaning up characters
+	- Changing the data type
+	- Normalizing the values
+
+![slide 31](ch2slides/ch2_31.png)
+
+- Dealing with stray characters (I)
+  - In this exercise, you will work with the RawSalary column of so_survey_df which contains the wages of the respondents along with the currency symbols and commas, such as $42,000. When importing data from Microsoft Excel, more often that not you will come across data in this form.
+  
+		# Remove the commas in the column
+		so_survey_df['RawSalary'] = so_survey_df['RawSalary'].str.replace(',', '')
+		
+		# Remove the dollar signs in the column
+		so_survey_df['RawSalary'] = so_survey_df['RawSalary'].str.replace('$','')
+
+  - Replacing/removing specific characters is a very useful skill.
+  
+- Dealing with stray characters (II)
+  - In the last exercise, you could tell quickly based off of the df.head() call which characters were causing an issue. In many cases this will not be so apparent. There will often be values deep within a column that are preventing you from casting a column as a numeric type so that it can be used in a model or further feature engineering.<br><br> One approach to finding these values is to force the column to the data type desired using pd.to_numeric(), coercing any values causing issues to NaN, Then filtering the DataFrame by just the rows containing the NaN values.<br><br> Try to cast the RawSalary column as a float and it will fail as an additional character can now be found in it. Find the character and remove it so the column can be cast as a float.
+  
+		# Attempt to convert the column to numeric values
+		numeric_vals = pd.to_numeric(so_survey_df['RawSalary'], errors='coerce')
+		
+		# Find the indexes of missing values
+		idx = numeric_vals.isna()
+		
+		# Print the relevant rows
+		print(so_survey_df['RawSalary'][idx])
+		
+		# Replace the offending characters
+		so_survey_df['RawSalary'] = so_survey_df['RawSalary'].str.replace('£','')
+		
+		# Convert the column to float
+		so_survey_df['RawSalary'] = so_survey_df['RawSalary'].astype('float')
+		
+		# Print the column
+		print(so_survey_df['RawSalary'])
+
+  - Remember that even after removing all the relevant characters, you still need to change the type of the column to numeric if you want to plot these continuous values.
+  
+- Method chaining
+  - When applying multiple operations on the same column (like in the previous exercises), you made the changes in several steps, assigning the results back in each step. However, when applying multiple successive operations on the same column, you can "chain" these operations together for clarity and ease of management. This can be achieved by calling multiple methods sequentially:
+  
+		# Method chaining
+		df['column'] = df['column'].method1().method2().method3()
+		
+		# Same as 
+		df['column'] = df['column'].method1()
+		df['column'] = df['column'].method2()
+		df['column'] = df['column'].method3()
+
+  - In this exercise you'll apply the same methods as before but chained.
+  
+		# Use method chaining
+		so_survey_df['RawSalary'] = so_survey_df['RawSalary']\
+		                              .str.replace(',','')\
+		                              .str.replace('$','')\
+		                              .str.replace('£','')\
+		                              .astype('float')
+									   
+		# Print the RawSalary column
+		print(so_survey_df['RawSalary'])
+
+  - Custom functions can be also used when method chaining using the **.apply()** method.

@@ -1,5 +1,5 @@
 # Feature Engineering: Chapter 2 - Dealing with Messy Data #
-Notes from the fourth chapter of the DataCamp Feature Engineering course accessible [here](https://learn.datacamp.com/courses/feature-engineering-for-machine-learning-in-python).
+Notes from the second chapter of the DataCamp Feature Engineering course accessible [here](https://learn.datacamp.com/courses/feature-engineering-for-machine-learning-in-python).
 
 ![slide 1](ch2slides/ch2_01.png)
 
@@ -52,24 +52,26 @@ Notes from the fourth chapter of the DataCamp Feature Engineering course accessi
 - How sparse is my data?
   - Most data sets contain missing values, often represented as NaN (Not a Number). If you are working with Pandas you can easily check how many missing values exist in each column. <br><br> Let's find out how many of the developers taking the survey chose to enter their age (found in the Age column of so\_survey_df) and their gender (Gender column of so\_survey_df).
   
-	# Subset the DataFrame
-	sub_df = so_survey_df[['Age','Gender']]
+	    # Subset the DataFrame
+	    sub_df = so_survey_df[['Age','Gender']]
         
-	# Print the number of non-missing values
-	print(sub_df.notnull().sum())
+	    # Print the number of non-missing values
+	    print(sub_df.notnull().sum())
 
 - Based on the results, the **Gender** column has 693 non-missing entries.
 
 - Finding the missing values
   - While having a summary of how much of your data is missing can be useful, often you will need to find the exact locations of these missing values. Using the same subset of the StackOverflow data from the last exercise (sub_df), you will show how a value can be flagged as missing.
   
-	# Print the top 10 entries of the DataFrame
-	print(sub_df.head(10))
+	    # Print the top 10 entries of the DataFrame
+	    print(sub_df.head(10))
 	
-	# Print the locations of the missing values
-	print(sub_df.head(10).isnull())
+	    # Print the locations of the missing values
+	    print(sub_df.head(10).isnull())
 	
-	# Print the locations of the non-missing values
-	print(sub_df.head(10).notnull())
+	    # Print the locations of the non-missing values
+	    print(sub_df.head(10).notnull())
 
   - Finding where the missing values exist can often be important.
+  
+  

@@ -74,4 +74,46 @@ Notes from the second chapter of the DataCamp Feature Engineering course accessi
 
   - Finding where the missing values exist can often be important.
   
+![slide 9](ch2slides/ch2_09.png)
+
+- Now that we can find the missing data, let's learn how to deal with them.
+
+| ![slide 10](ch2slides/ch2_10.png) |
+| :-: |
+| Under **listwise deletion** the first and third rows will be dropped because of missing values in the _ConvertedSalary_ column. |
+
+- If you're confident the missing values are occuring randomly (not intentionally being omitted) the most effective & statistically sound approach to dealing with them is called **complete case analysis** or **listwise deletion**.
+  - In this method, a record is fully excluded from your model if any of its values are missing.
   
+![slide 11](ch2slides/ch2_11.png)
+
+ - Using pandas to implement listwise deletion, set the _how_ argument to 'any', to delete all rows with at least one missing value.
+ 
+| ![slide 12](ch2slides/ch2_12.png) |
+| :-: |
+| To drop rows with missing values in a specific column, use the _subset_ argument. |
+
+- Pass a list of columns to the _subset_ argument to specify which columns to consider when deleting rows.
+
+![slide 13](ch2slides/ch2_13.png)
+
+- While the prefereable approach to missing data is listwise deletion, there're drawbacks:
+  - Any valid data points that share a row with th emissing values ger deleted.
+  - If values don't occur at random, it can negatively affect the model.
+  - Removing a feature instead of a row reduces the degrees of freedom of your model.
+  
+![slide 14](ch2slides/ch2_14.png)
+
+- The most common way to deal with missing values is to use the **fillna()** method.
+  - You provide the value that you want to replace the missing values with.
+  - With categorical columns, it's common to replace missing values with strings like 'Other', 'Not Given', etc.
+  - To modify the values in-place, in the original DataFrame, set the _inplace_ argument to True.
+  
+![slide 15](ch2slides/ch2_15.png)
+
+- When you believe that the absence or presence of data is more important than the values themselves, you can create a column that records the absence of data and then drop the original column.
+  - Call the **notnull()** method on a specific column, recording with True or False the presence of data.
+  - To drop columns from a DataFrame, you can use the **drop()** method.
+    - Specify a list of column names you want to drop via the _columns_ argument.
+
+![slide 16](ch2slides/ch2_16.png)

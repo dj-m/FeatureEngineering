@@ -117,3 +117,46 @@ Notes from the second chapter of the DataCamp Feature Engineering course accessi
     - Specify a list of column names you want to drop via the _columns_ argument.
 
 ![slide 16](ch2slides/ch2_16.png)
+
+- Listwise deletion
+  - The simplest way to deal with missing values in your dataset when they are occurring entirely at random is to remove those rows, also called 'listwise deletion'.<br><br> Depending on the use case, you will sometimes want to remove all missing values in your data while other times you may want to only remove a particular column if too many values are missing in that column.
+  
+		# Print the number of rows and columns
+		print(so_survey_df.shape)
+		
+		# Create a new DataFrame dropping all incomplete rows
+		no_missing_values_rows = so_survey_df.dropna()
+		
+		# Print the shape of the new DataFrame
+		print(no_missing_values_rows.shape)
+		
+		# Create a new DataFrame dropping all columns with incomplete rows
+		no_missing_values_cols = so_survey_df.dropna(how = 'any', axis=1)
+		
+		# Print the shape of the new DataFrame
+		print(no_missing_values_cols.shape)
+		
+		# Drop all rows where Gender is missing
+		no_gender = so_survey_df.dropna(subset = ['Gender'])
+		
+		# Print the shape of the new DataFrame
+		print(no_gender.shape)
+
+  -  As you can see dropping all rows that contain any missing values may greatly reduce the size of your dataset. So you need to think carefully and consider several trade-offs when deleting missing values.
+
+- Replacing missing values with constants
+  - While removing missing data entirely maybe a correct approach in many situations, this may result in a lot of information being omitted from your models.<br><br> You may find categorical columns where the missing value is a valid piece of information in itself, such as someone refusing to answer a question in a survey. In these cases, you can fill all missing values with a new category entirely, for example 'No response given'.
+  
+		# Print the count of occurrences
+		print(so_survey_df['Gender'].value_counts())
+		
+		# Replace missing values
+		so_survey_df['Gender'].fillna('Not Given', inplace = True)
+		
+		# Print the count of each value
+		print(so_survey_df['Gender'].value_counts())
+
+  - By filling in these missing values you can use the columns in your analyses.
+
+![slide 17](ch2slides/ch2_17.png)
+
